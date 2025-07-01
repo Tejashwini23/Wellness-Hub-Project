@@ -5,10 +5,10 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Linking,
   Share,
   Alert,
   Platform,
+  RefreshControl,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '@/contexts/AuthContext';
@@ -16,6 +16,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { useRouter } from 'expo-router';
 import { supabase } from '@/services/supabase';
 import { Settings, User, Award, TrendingUp, Clock, SquareCheck as CheckSquare, DollarSign, Smile, Heart, ShoppingBag, Moon, Sun, Info, Gamepad2, Music, Bell, Share2 } from 'lucide-react-native';
+import { useFocusEffect } from '@react-navigation/native';
 
 interface TodayStats {
   pomodoroSessions: number;
@@ -36,16 +37,31 @@ export default function HomeScreen() {
     moodEntries: 0,
   });
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   const { user, signOut } = useAuth();
   const { colors, theme, toggleTheme } = useTheme();
   const router = useRouter();
+
+  // Refresh data when screen comes into focus
+  useFocusEffect(
+    React.useCallback(() => {
+      if (user) {
+        fetchTodayStats();
+      }
+    }, [user])
+  );
 
   useEffect(() => {
     if (user) {
       fetchTodayStats();
     }
   }, [user]);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchTodayStats();
+  };
 
   const fetchTodayStats = async () => {
     try {
@@ -112,6 +128,7 @@ export default function HomeScreen() {
       console.error('Error fetching today stats:', error);
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   };
 
@@ -199,7 +216,13 @@ export default function HomeScreen() {
   const styles = createStyles(colors);
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={true}>
+    <ScrollView 
+      style={styles.container} 
+      showsVerticalScrollIndicator={true}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       {/* Header */}
       <LinearGradient
         colors={[colors.primary, colors.accent]}
