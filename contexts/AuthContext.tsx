@@ -40,7 +40,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (session?.user) {
           await fetchUserProfile(session.user.id);
           
-          // Show success message for sign in
+          // Show success message for sign in (but not for initial load)
           if (event === 'SIGNED_IN') {
             Alert.alert('Welcome!', 'You have successfully logged in.', [{ text: 'OK' }]);
           }
@@ -137,12 +137,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       setLoading(true);
       
-      // First, sign up the user with email confirmation disabled for development
+      // Sign up the user without email confirmation
       const { data, error } = await supabase.auth.signUp({
         email: email.trim().toLowerCase(),
         password,
         options: {
-          emailRedirectTo: `${Platform.OS === 'web' ? window.location.origin : 'https://wellnesshub.app'}/auth/callback`,
+          emailRedirectTo: undefined, // Remove email confirmation
         },
       });
 
@@ -171,28 +171,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return { error: 'Failed to create user profile: ' + profileError.message };
       }
 
-      // Show success message
-      Alert.alert(
-        'Account Created!', 
-        data.user.email_confirmed_at 
-          ? 'Your account has been created successfully!'
-          : 'Your account has been created! Please check your email to verify your account.',
-        [{ text: 'OK' }]
-      );
-
-      // If user is immediately confirmed (e.g., in development)
-      if (data.user.email_confirmed_at) {
-        await fetchUserProfile(data.user.id);
-        
-        // Store session securely (only on native platforms)
-        if (Platform.OS !== 'web' && data.session) {
-          try {
-            await SecureStore.setItemAsync('userSession', JSON.stringify(data.session));
-          } catch (storeError) {
-            console.warn('Could not store session securely:', storeError);
-          }
+      // Fetch the user profile immediately
+      await fetchUserProfile(data.user.id);
+      
+      // Store session securely (only on native platforms)
+      if (Platform.OS !== 'web' && data.session) {
+        try {
+          await SecureStore.setItemAsync('userSession', JSON.stringify(data.session));
+        } catch (storeError) {
+          console.warn('Could not store session securely:', storeError);
         }
       }
+
+      // Show success message
+      Alert.alert(
+        '🎉 Account Created Successfully!', 
+        'Welcome to Wellness Hub! Your account has been created and you are now logged in. Start your wellness journey today!',
+        [{ text: 'Get Started', style: 'default' }]
+      );
 
       return {};
     } catch (error: any) {

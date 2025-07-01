@@ -69,11 +69,11 @@ export default function LoginScreen() {
     setResetLoading(false);
     
     if (error) {
-      Alert.alert('Error', error);
+      Alert.alert('Reset Password Error', error);
     } else {
       Alert.alert(
-        'Reset Email Sent',
-        'Check your email for password reset instructions. If you don\'t see the email, please check your spam folder.',
+        '📧 Password Reset Email Sent',
+        `We've sent a password reset link to ${email}. Please check your email and follow the instructions to reset your password.\n\nIf you don't see the email, please check your spam folder.`,
         [{ text: 'OK' }]
       );
     }
