@@ -663,40 +663,143 @@ export default function HomeScreen() {
     router.push('/shop');
   };
 
-  const handleShareApp = async () => {
-    try {
-      const shareMessage = 'Check out Wellness Hub - Your path to better living! Track habits, manage mood, and improve your wellness journey.';
+  // const handleShareApp = async () => {
+  //   try {
+  //     const shareMessage = 'Check out Wellness Hub - Your path to better living! Track habits, manage mood, and improve your wellness journey.';
       
-      if (Platform.OS === 'web') {
-        // Simple web sharing - copy to clipboard
-        if (navigator.clipboard) {
-          await navigator.clipboard.writeText(shareMessage + ' Visit: ' + window.location.origin);
-          Alert.alert('Copied!', 'Share message copied to clipboard');
-        } else {
-          // Fallback - show alert with message to copy
-          Alert.alert(
-            'Share Wellness Hub',
-            shareMessage + '\n\nCopy this message to share with others!',
-            [{ text: 'OK' }]
-          );
-        }
-      } else {
-        // Native mobile sharing
-        await Share.share({
-          message: shareMessage,
-          title: 'Wellness Hub - Better Living Made Simple',
-        });
-      }
-    } catch (error) {
-      console.error('Error sharing:', error);
-      // Simple fallback
-      Alert.alert(
-        'Share Wellness Hub',
-        'Check out Wellness Hub - Your path to better living! Track habits, manage mood, and improve your wellness journey.',
-        [{ text: 'OK' }]
-      );
+  //     if (Platform.OS === 'web') {
+  //       // Simple web sharing - copy to clipboard
+  //       if (navigator.clipboard) {
+  //         await navigator.clipboard.writeText(shareMessage + ' Visit: ' + window.location.origin);
+  //         Alert.alert('Copied!', 'Share message copied to clipboard');
+  //       } else {
+  //         // Fallback - show alert with message to copy
+  //         Alert.alert(
+  //           'Share Wellness Hub',
+  //           shareMessage + '\n\nCopy this message to share with others!',
+  //           [{ text: 'OK' }]
+  //         );
+  //       }
+  //     } else {
+  //       // Native mobile sharing
+  //       await Share.share({
+  //         message: shareMessage,
+  //         title: 'Wellness Hub - Better Living Made Simple',
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.error('Error sharing:', error);
+  //     // Simple fallback
+  //     Alert.alert(
+  //       'Share Wellness Hub',
+  //       'Check out Wellness Hub - Your path to better living! Track habits, manage mood, and improve your wellness journey.',
+  //       [{ text: 'OK' }]
+  //     );
+  //   }
+  // };
+import { Alert, Linking, Platform } from 'react-native';
+import * as Clipboard from 'expo-clipboard'; // Make sure this is installed
+// Run: expo install expo-clipboard
+
+const shareMessage =
+  'Check out Wellness Hub - Your path to better living! 🌱 Track habits, manage mood, and improve your wellness journey.\n\nVisit: https://the-wellness-hub.netlify.app/login';
+
+const openURL = async (url: string, fallbackMessage: string) => {
+  try {
+    const supported = await Linking.canOpenURL(url);
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      showAlert('App Not Installed', fallbackMessage);
     }
-  };
+  } catch (error) {
+    console.error('Error:', error);
+    showAlert('Error', 'Unable to share content.');
+  }
+};
+
+const copyToClipboard = async () => {
+  await Clipboard.setStringAsync(shareMessage);
+  showAlert(
+    'Copied!',
+    'Message copied to clipboard. Open Instagram and paste it into your story or post.'
+  );
+};
+
+const showAlert = (title: string, message: string) => {
+  if (Platform.OS === 'web') {
+    window.alert(`${title}\n\n${message}`);
+  } else {
+    Alert.alert(title, message);
+  }
+};
+
+export const handleShareApp = () => {
+  if (Platform.OS === 'web') {
+    // Web: simple text prompt
+    const choice = window.prompt(
+      'Share Wellness Hub\n\nType: whatsapp, facebook, or instagram',
+      'whatsapp'
+    );
+
+    if (!choice) return;
+
+    switch (choice.toLowerCase()) {
+      case 'whatsapp':
+        openURL(
+          `https://wa.me/?text=${encodeURIComponent(shareMessage)}`,
+          'Install WhatsApp to share.'
+        );
+        break;
+
+      case 'facebook':
+        openURL(
+          `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+            'https://the-wellness-hub.netlify.app/login'
+          )}&quote=${encodeURIComponent(shareMessage)}`,
+          'Log in to Facebook to share.'
+        );
+        break;
+
+      case 'instagram':
+        copyToClipboard(); // Instagram fallback
+        break;
+
+      default:
+        window.alert('Invalid option.');
+    }
+  } else {
+    // Native: show platform picker
+    Alert.alert('Share Wellness Hub', 'Choose where to share:', [
+      {
+        text: 'WhatsApp',
+        onPress: () =>
+          openURL(
+            `https://wa.me/?text=${encodeURIComponent(shareMessage)}`,
+            'Install WhatsApp to share.'
+          ),
+      },
+      {
+        text: 'Facebook',
+        onPress: () =>
+          openURL(
+            `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+              'https://the-wellness-hub.netlify.app/login'
+            )}&quote=${encodeURIComponent(shareMessage)}`,
+            'Log in to Facebook to share.'
+          ),
+      },
+      {
+        text: 'Copy To Clipboard',
+        onPress: copyToClipboard,
+      },
+      { text: 'Cancel', style: 'cancel' },
+    ]);
+  }
+};
+
+
+
 
   const quickActions = [
     { title: 'Pomodoro', icon: Clock, route: '/(tabs)/pomodoro', color: colors.primary },
