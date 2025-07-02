@@ -15,7 +15,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useRouter } from 'expo-router';
 import { supabase } from '@/services/supabase';
-import { Settings, User, Award, TrendingUp, Clock, SquareCheck as CheckSquare, DollarSign, Smile, Heart, ShoppingBag, Moon, Sun, Info, Gamepad2, Music, Bell, Share2 } from 'lucide-react-native';
+import { Settings, User, Award, TrendingUp, Clock, SquareCheck as CheckSquare, DollarSign, Smile, Heart, ShoppingBag, Moon, Sun, Info, Gamepad2, Share2 } from 'lucide-react-native';
 import { useFocusEffect } from '@react-navigation/native';
 
 interface TodayStats {
@@ -189,12 +189,12 @@ export default function HomeScreen() {
   };
 
   const quickActions = [
-    { title: 'Pomodoro', icon: Clock, route: '/pomodoro', color: colors.primary },
-    { title: 'Habits', icon: CheckSquare, route: '/habits', color: colors.secondary },
-    { title: 'Budget', icon: DollarSign, route: '/budget', color: colors.warning },
-    { title: 'Mood', icon: Smile, route: '/mood', color: colors.accent },
-    { title: 'Wellness', icon: Heart, route: '/wellness', color: colors.error },
-    { title: 'Game', icon: Gamepad2, route: '/game', color: '#FF6B6B' },
+    { title: 'Pomodoro', icon: Clock, route: '/(tabs)/pomodoro', color: colors.primary },
+    { title: 'Habits', icon: CheckSquare, route: '/(tabs)/habits', color: colors.secondary },
+    { title: 'Budget', icon: DollarSign, route: '/(tabs)/budget', color: colors.warning },
+    { title: 'Mood', icon: Smile, route: '/(tabs)/mood', color: colors.accent },
+    { title: 'Wellness', icon: Heart, route: '/(tabs)/wellness', color: colors.error },
+    { title: 'Game', icon: Gamepad2, route: '/(tabs)/game', color: '#FF6B6B' },
   ];
 
   const getMoodEmoji = (mood: number) => {
@@ -240,18 +240,6 @@ export default function HomeScreen() {
               ) : (
                 <Sun size={24} color="#FFFFFF" />
               )}
-            </TouchableOpacity>
-            <TouchableOpacity 
-              onPress={() => router.push('/music')} 
-              style={styles.iconButton}
-            >
-              <Music size={24} color="#FFFFFF" />
-            </TouchableOpacity>
-            <TouchableOpacity 
-              onPress={() => router.push('/notifications')} 
-              style={styles.iconButton}
-            >
-              <Bell size={24} color="#FFFFFF" />
             </TouchableOpacity>
             <TouchableOpacity 
               onPress={handleShareApp} 
