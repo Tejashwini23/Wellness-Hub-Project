@@ -13,7 +13,7 @@
     },
     "web": {
       "bundler": "metro",
-      "output": "single",
+      "output": "web",
       "favicon": "./assets/images/better-health.png"
     },
     "plugins": ["expo-router", "expo-font", "expo-web-browser"],
