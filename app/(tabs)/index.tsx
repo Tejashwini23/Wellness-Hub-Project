@@ -138,52 +138,35 @@ export default function HomeScreen() {
 
   const handleShareApp = async () => {
     try {
-      // Check if we're on web and if Web Share API is available
+      const shareMessage = 'Check out Wellness Hub - Your path to better living! Track habits, manage mood, and improve your wellness journey.';
+      
       if (Platform.OS === 'web') {
-        if (navigator.share && navigator.canShare) {
-          const shareData = {
-            title: 'Wellness Hub - Better Living Made Simple',
-            text: 'Check out Wellness Hub - Your path to better living! Track habits, manage mood, and improve your wellness journey.',
-            url: window.location.origin,
-          };
-          
-          // Check if the data can be shared
-          if (navigator.canShare(shareData)) {
-            await navigator.share(shareData);
-            return;
-          }
-        }
-        
-        // Fallback for web: copy to clipboard
-        const shareText = 'Check out Wellness Hub - Your path to better living! Track habits, manage mood, and improve your wellness journey. Visit: ' + window.location.origin;
-        
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          await navigator.clipboard.writeText(shareText);
-          Alert.alert('Copied!', 'Share link copied to clipboard');
+        // Simple web sharing - copy to clipboard
+        if (navigator.clipboard) {
+          await navigator.clipboard.writeText(shareMessage + ' Visit: ' + window.location.origin);
+          Alert.alert('Copied!', 'Share message copied to clipboard');
         } else {
-          // Final fallback: show the text to copy manually
+          // Fallback - show alert with message to copy
           Alert.alert(
             'Share Wellness Hub',
-            shareText,
-            [
-              { text: 'OK', style: 'default' }
-            ]
+            shareMessage + '\n\nCopy this message to share with others!',
+            [{ text: 'OK' }]
           );
         }
       } else {
         // Native mobile sharing
-        const result = await Share.share({
-          message: 'Check out Wellness Hub - Your path to better living! Track habits, manage mood, and improve your wellness journey. Download now!',
-          url: 'https://wellnesshub.app', // Replace with actual app store URL
+        await Share.share({
+          message: shareMessage,
           title: 'Wellness Hub - Better Living Made Simple',
         });
       }
     } catch (error) {
-      console.error('Error sharing app:', error);
-      // Provide user-friendly error message
+      console.error('Error sharing:', error);
+      // Simple fallback
       Alert.alert(
-        'Share Not Available', 
-        'Sharing is not available in this browser. You can manually copy and share this link: ' + (Platform.OS === 'web' ? window.location.origin : 'https://wellnesshub.app')
+        'Share Wellness Hub',
+        'Check out Wellness Hub - Your path to better living! Track habits, manage mood, and improve your wellness journey.',
+        [{ text: 'OK' }]
       );
     }
   };
