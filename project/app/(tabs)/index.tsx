@@ -761,7 +761,7 @@ export const handleShareApp = () => {
         );
         break;
 
-      case 'instagram':
+      case 'Copy to Clipboard':
         copyToClipboard(); // Instagram fallback
         break;
 
@@ -770,7 +770,7 @@ export const handleShareApp = () => {
     }
   } else {
     // Native: show platform picker
-    Alert.alert('Share Wellness Hub', 'Choose where to share:', [
+    alert('Share Wellness Hub', 'Choose where to share:', [
       {
         text: 'WhatsApp',
         onPress: () =>
