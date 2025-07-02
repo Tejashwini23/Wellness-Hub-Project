@@ -697,10 +697,16 @@ export default function HomeScreen() {
   //     );
   //   }
   // };
+
 import { Alert, Linking, Platform } from 'react-native';
 import * as Clipboard from 'expo-clipboard'; // Make sure this is installed
 // Run: expo install expo-clipboard
-
+const [copied, setCopied] = useState(false);
+const handleCopy = async () => {
+  await Clipboard.setStringAsync(shareMessage);
+  setCopied(true);
+  setTimeout(() => setCopied(false), 3000);
+};
 const shareMessage =
   'Check out Wellness Hub - Your path to better living! 🌱 Track habits, manage mood, and improve your wellness journey.\n\nVisit: https://the-wellness-hub.netlify.app/login';
 
@@ -853,6 +859,7 @@ export const handleShareApp = () => {
               ) : (
                 <Sun size={24} color="#FFFFFF" />
               )}
+                
             </TouchableOpacity>
             <TouchableOpacity 
               onPress={handleShareApp} 
@@ -860,6 +867,11 @@ export const handleShareApp = () => {
             >
               <Share2 size={24} color="#FFFFFF" />
             </TouchableOpacity>
+                {copied && (
+  <Text style={{ color: 'green', marginTop: 6, fontSize: 12 }}>
+    ✅ Copied to clipboard!
+  </Text>
+)}
             <TouchableOpacity 
               onPress={() => router.push('/profile')} 
               style={styles.iconButton}
