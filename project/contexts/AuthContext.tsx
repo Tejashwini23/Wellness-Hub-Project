@@ -428,7 +428,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         email: email.trim().toLowerCase(),
         password,
         options: {
-          emailRedirectTo: https://the-wellness-hub.netlify.app/login, // Remove email confirmation
+          emailRedirectTo: https://the-wellness-hub.netlify.app, // Remove email confirmation
         },
       });
       
