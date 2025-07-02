@@ -258,7 +258,7 @@ export default function AboutScreen() {
             <Mail size={24} color={colors.primary} />
             <View style={styles.contactContent}>
               <Text style={styles.contactTitle}>Email Us</Text>
-              <Text style={styles.contactDescription}>hello@wellnesshub.com</Text>
+              <Text style={styles.contactDescription}>tejashvarkr@gmail.com</Text>
             </View>
           </TouchableOpacity>
 
@@ -266,7 +266,7 @@ export default function AboutScreen() {
             <Globe size={24} color={colors.accent} />
             <View style={styles.contactContent}>
               <Text style={styles.contactTitle}>Visit Our Website</Text>
-              <Text style={styles.contactDescription}>www.wellnesshub.com</Text>
+              <Text style={styles.contactDescription}>https://the-wellness-hub.netlify.app/</Text>
             </View>
           </TouchableOpacity>
         </View>
