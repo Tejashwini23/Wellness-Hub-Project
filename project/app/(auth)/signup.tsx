@@ -494,9 +494,6 @@ export default function SignUpScreen() {
 
               <View style={styles.infoContainer}>
                 <Text style={styles.infoText}>
-                  ✅ No email verification required - get started immediately!
-                </Text>
-                <Text style={styles.infoText}>
                   🔒 Your account will be created instantly and securely
                 </Text>
               </View>
