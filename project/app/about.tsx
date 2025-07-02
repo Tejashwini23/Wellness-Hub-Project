@@ -42,11 +42,11 @@ export default function AboutScreen() {
   const router = useRouter();
 
   const handleEmailPress = () => {
-    Linking.openURL('mailto:hello@wellnesshub.com');
+    Linking.openURL('mailto:tejashvarkr@gmail.com');
   };
 
   const handleWebsitePress = () => {
-    Linking.openURL('https://wellnesshub.com');
+    Linking.openURL('https://the-wellness-hub.netlify.app/');
   };
 
   const submitFeedback = async () => {
@@ -120,20 +120,12 @@ export default function AboutScreen() {
 
   const team = [
     {
-      name: 'Sarah Johnson',
-      role: 'Wellness Expert',
-      description: 'Licensed therapist with 10+ years in mental health and wellness.',
+      name: 'Tejashvar K.R',
+      role: 'Developer and Founder',
+      description: 'B.Tech Final year Student Pursuing Computer Science and Engineering.',
     },
-    {
-      name: 'Mike Chen',
-      role: 'Product Designer',
-      description: 'UX designer passionate about creating intuitive health apps.',
-    },
-    {
-      name: 'Emily Rodriguez',
-      role: 'Data Scientist',
-      description: 'Specialist in behavioral analytics and wellness insights.',
-    },
+
+  
   ];
 
   const styles = createStyles(colors);
