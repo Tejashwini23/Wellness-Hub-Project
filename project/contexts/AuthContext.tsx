@@ -428,10 +428,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         email: email.trim().toLowerCase(),
         password,
         options: {
-          emailRedirectTo: undefined, // Remove email confirmation
+          emailRedirectTo: https://the-wellness-hub.netlify.app/, // Remove email confirmation
         },
       });
-
+      
+        if (data) {
+          console.log('User signed up successfully, check your email for confirmation!');
+        } 
+        else {
+          console.error('Error signing up:', error.message);
+        }
       if (error) {
         console.error('Sign up error:', error);
         return { error: error.message };
